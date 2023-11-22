@@ -46,13 +46,15 @@ public class Player : MonoBehaviour
         speed = config.velocidad;
         if (carriles)
         {
-            if (cantCarriles == 2)
+            if (cantCarriles == 3)
             {
                 posCarriles = new float[3] { -movementDistance, 0, movementDistance };
             } else if (cantCarriles == 3)
             {
-                posCarriles = new float[2] { -movementDistance, movementDistance };
-                //transform.Translate(this.transform.position.x + movementDistance, transform.position.y, 0);
+
+                posCarriles = new float[3] { -movementDistance, 0, movementDistance };
+                //  posCarriles = new float[2] { -movementDistance, movementDistance };
+
             } else
             {
                 Debug.Log("Estas intentando usar" + cantCarriles + ". El permitido es tres o dos. Para otra config hay que programarlo");
@@ -76,27 +78,75 @@ public class Player : MonoBehaviour
 
     private void Movement()
     {
-        
-        if (carriles)
-        {
-            float playerPosition = transform.position.x;
 
-            if (Input.GetKeyDown(KeyCode.D))
+
+
+
+        /*  if (carriles)
+          {
+              float playerPosition = transform.position.x;
+
+              if (Input.GetKeyDown(KeyCode.D))
+              {
+                  if (playerPosition < posCarriles[2])
+                  {
+                      transform.Translate(movementDistance, 0, 0);
+                  }
+              }
+
+
+
+
+
+
+
+            else if (Input.GetKeyDown(KeyCode.S)) 
             {
-                if (playerPosition < posCarriles[1])
+
+                if (playerPosition < posCarriles[2])
                 {
                     transform.Translate(movementDistance, 0, 0);
                 }
+               
             }
-            else if (Input.GetKeyDown(KeyCode.A))
-            {
-                if (playerPosition > posCarriles[0])
-                {
-                    transform.Translate(-movementDistance, 0, 0);
-                }
 
-            }
+
+
+
+
+
+            else if (Input.GetKeyDown(KeyCode.A))
+              {
+                  if (playerPosition > posCarriles[0])
+                  {
+                      transform.Translate(-movementDistance, 0, 0);
+                  }
+
+              }
+          }*/
+
+
+
+
+
+
+        if (carriles)
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            MoveToLane(posCarriles[2]);
         }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            
+            MoveToLane(posCarriles[1]);
+        }
+        else if (Input.GetKeyDown(KeyCode.A))
+        {
+            MoveToLane(posCarriles[0]);
+        }
+    }
+
         else
         {
             float horizontalInput = Input.GetAxis("Horizontal");
@@ -165,20 +215,24 @@ public class Player : MonoBehaviour
 
     private void Shoot()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && canShoot)
-        {
-            StartCoroutine(ShootDelay());
-            if (Configuracion_General.runner3D == false)
+
+
+            if (Input.GetKeyDown(KeyCode.Return) && canShoot)
             {
-                Instantiate(bullets[bulletType], new Vector3(transform.position.x, transform.position.y + 1, 0), Quaternion.identity);
-            } else
-            {
-                Instantiate(bullets[bulletType], new Vector3(transform.position.x, -1f, transform.position.z), Quaternion.identity);
+                StartCoroutine(ShootDelay());
+                if (Configuracion_General.runner3D == false)
+                {
+                    Instantiate(bullets[bulletType], new Vector3(transform.position.x, transform.position.y + 1, 0), Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(bullets[bulletType], new Vector3(transform.position.x, -1f, transform.position.z), Quaternion.identity);
+                }
+
             }
-
         }
-    }
-
+    
+    
     public IEnumerator ShootDelay()
     {
         if (Configuracion_General.runner3D == false)
@@ -197,8 +251,26 @@ public class Player : MonoBehaviour
     {
         animator.SetTrigger("ataque");
     }
-   
-    
+
+
+
+
+
+
+    private void MoveToLane(float targetLane)
+    {
+        float currentLane = transform.position.x;
+
+        if (currentLane < targetLane)
+        {
+            transform.Translate(movementDistance, 0, 0);
+        }
+        else if (currentLane > targetLane)
+        {
+            transform.Translate(-movementDistance, 0, 0);
+        }
+    }
+
 }
 
 

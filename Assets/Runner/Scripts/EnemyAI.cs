@@ -19,14 +19,12 @@ public class EnemyAI : MonoBehaviour
 
 
 
-
-
-    private Animator animator;
+//private Animator animator;
     [SerializeField] private Transform radioDeColision;
 
 
 
-
+    [SerializeField] private GameObject efectomuerte;
 
 
     private void Awake()
@@ -55,7 +53,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
         combatcac.OnGolpeRealizado += HandleGolpeRealizado;
     }
 
@@ -72,18 +70,6 @@ public class EnemyAI : MonoBehaviour
             TomarDaño(daño);
         }
     }
-
-
-
-
-    public void TomarDaño(float daño)
-    {
-        life -= dmg;
-        if (life <= 0) {
-        //   muerte();
-                }
-    }
-
 
 
 
@@ -139,7 +125,7 @@ public class EnemyAI : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collision)
     {
 
-        if (collision.CompareTag("Player")) // Verifica la etiqueta del jugador
+        if (collision.CompareTag("Player")) 
         {
             life -= 1;
         }
@@ -218,12 +204,24 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
+    public void TomarDaño(float daño)
+    {
+        life -= dmg;
+        if (life <= 0)
+        {
+            Muerte();
+        }
+    }
+
     private void Muerte()
     {
         // Agrega aquí cualquier lógica adicional para cuando el enemigo muere
-        animator.SetTrigger("muerte");
+       // animator.SetTrigger("muerte");
         //animator.SetBool("muerte");
-        Destroy(gameObject); // O desactiva el objeto, según tus necesidades
+       // Destroy(gameObject); // O desactiva el objeto, según tus necesidades
+
+        Instantiate(efectomuerte, transform.position, Quaternion.identity);
+        Destroy(gameObject);
 
     }
 }

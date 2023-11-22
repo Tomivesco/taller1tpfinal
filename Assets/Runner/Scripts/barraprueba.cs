@@ -6,23 +6,44 @@ using UnityEngine.UI;
 public class barraprueba : MonoBehaviour
 
 {
-    public Slider barraDeProgreso;
-    public Transform player;
+    [SerializeField] Transform Player;
+    [SerializeField] Transform endline;
+    [SerializeField] Slider slider;
 
-    private RectTransform barraTransform;
+    float maxDistance;
 
     private void Start()
     {
-        barraTransform = barraDeProgreso.GetComponent<RectTransform>();
+        maxDistance = getDistance();
     }
 
     private void Update()
     {
-        if (player != null)
+        // if (Player.position.y <= maxDistance && Player.position.y <= endline.position.y)
+        if (Player.position.y <= endline.position.y)
         {
-            // Ajusta la posición de la barra de progreso según la posición del jugador.
-            barraTransform.position = Camera.main.WorldToScreenPoint(player.position);
+            float distance = 1 - (getDistance() / maxDistance);
+            setProgress(distance);
         }
     }
+
+    float getDistance()
+    {
+        return Vector3.Distance(Player.position, endline.position);
+    }
+
+    void setProgress(float p)
+    {
+        slider.value = p;
+    }
+
 }
+
+
+   
+
+
+    
+
+
 
